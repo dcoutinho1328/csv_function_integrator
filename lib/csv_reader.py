@@ -133,3 +133,6 @@ class GraphCSV():
             self.__integral = integrate.cumulative_trapezoid(self.__yValues, self.__xValues, initial=0)
         except:
             raise self.__integrationError
+
+    def getPeakValue(self):
+        return max(self.__yValues)
