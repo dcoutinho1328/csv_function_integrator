@@ -13,9 +13,10 @@ class GraphCSV():
     __graphError = lambda self, operation: Exception(f'Não foi possível {operation} o gráfico')
     __integrationError = Exception('Não foi possível calcular a integral')
 
-    def __init__(self, file):
+    def __init__(self, file, ch=1):
         try:
             csvFile = open(file, 'r')
+            self.__channel = ch
             self.__reader = []
             for line in csv.reader(csvFile, dialect='excel'):
                 self.__reader.append(line)
@@ -27,40 +28,58 @@ class GraphCSV():
     def __populateFields(self):
         #Gets graph name
         try:
-            self.__name = self.__reader[6][1]
+            if(self.__channel == 1):
+                self.__name = self.__reader[15][1]
+            else:
+                self.__name = self.__reader[15][3]               
+            
         except:
             raise self.__getInfoError('o nome')
 
         #Gets graph x unit
         try:
-            self.__xUnit = self.__reader[10][1]
+            if(self.__channel == 1):
+                self.__xUnit = self.__reader[4][1]
+            else:
+                self.__xUnit = self.__reader[4][7]
         except:
             raise self.__getInfoError('a unidade do eixo x')
 
         #Gets graph y unit
         try:
-            self.__yUnit = self.__reader[7][1]
+            if(self.__channel == 1):
+                self.__yUnit = self.__reader[11][1]
+            else:
+                self.__yUnit = self.__reader[11][7]
         except:
             raise self.__getInfoError('a unidade do eixo y')
 
         #Gets graph y offset
         try:
-            self.__yOffset = float(self.__reader[9][1])
+            if(self.__channel == 1):
+                self.__yOffset = float(self.__reader[12][1])
+            else:
+                self.__yOffset = float(self.__reader[12][7])
         except:
             raise self.__getInfoError('a unidade do eixo y')
 
         #Get points
         try:
-          self.__points = []
-          self.__xValues = []
-          self.__yValues = []
-          xOffset = float(self.__reader[19][3])
-          for line in self.__reader[19:-1]:
-              x = float(line[3]) - xOffset
-              y = float(line[4]) - self.__yOffset
-              self.__xValues.append(x)
-              self.__yValues.append(y)
-              self.__points.append((x,y))
+            self.__points = []
+            self.__xValues = []
+            self.__yValues = []
+            xOffset = float(self.__reader[16][0])
+            length = int(len(self.__reader[16:])/3)
+            print(length)
+            for line in self.__reader[16:length]:
+                x = float(line[0]) - xOffset
+                if(self.__channel == 1):                
+                    y = float(line[1]) - self.__yOffset
+                else:
+                    y = float(line[3]) - self.__yOffset
+                self.__xValues.append(x)
+                self.__yValues.append(y)
+                self.__points.append((x,y))
         except:
             raise self.__getInfoError('os pontos')
 

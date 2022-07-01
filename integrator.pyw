@@ -6,6 +6,7 @@ sg.theme('Topanga')
 
 layout = [[sg.T('Choose CSV file')],
           [sg.In(key='-FB-', readonly=True, text_color='#282923'), sg.FileBrowse()],
+          [sg.T('Insert Channel:'), sg.In(key='-CH-', text_color='#282923', background_color='#ffffff', size=(10,1)), sg.B('Choose', key='-CHOOSE-')],
           [sg.B('Select', key='-SELECT-')],
           [sg.Canvas(key='-CANVAS-', size=(650,480))],
           [sg.B('Function', key='-FUNCTION-'), sg.B('Integral', key='-INTEGRATE-'), sg.B('Compare', key='-COMPARE-')]]
@@ -20,19 +21,28 @@ def drawFigure(canvas, figure):
 
 graphInfo = None
 figureCanvas = None
+channel = None
 while True:
     event, values = window.read()
 
     if event == sg.WIN_CLOSED:
         break
 
+    if event == '-CHOOSE-':
+        try:
+            channel = int(values['-CH-'])
+            window['-CH-'].update(text_color='#282923')
+        except:
+            window['-CH-'].update(text_color='#c44d45')
+
     if event == '-SELECT-':
-        graphInfo = GraphCSV(values['-FB-'])
-        graphInfo.buildFunctionGraph()
-        graph = graphInfo.exportGraph()
-        if(figureCanvas):
-            figureCanvas.get_tk_widget().forget()
-        figureCanvas = drawFigure(window['-CANVAS-'].TKCanvas, graph)
+        if(channel == 1 or channel == 2):
+            graphInfo = GraphCSV(values['-FB-'], channel)
+            graphInfo.buildFunctionGraph()
+            graph = graphInfo.exportGraph()
+            if(figureCanvas):
+                figureCanvas.get_tk_widget().forget()
+            figureCanvas = drawFigure(window['-CANVAS-'].TKCanvas, graph)
 
     if event == '-FUNCTION-':
         if graphInfo != None:
