@@ -1,8 +1,5 @@
-from tkinter import font
-from turtle import update
 import PySimpleGUI as sg
 from lib.csv_reader import GraphCSV
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 sg.theme('Topanga')
 

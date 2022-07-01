@@ -70,7 +70,6 @@ class GraphCSV():
             self.__yValues = []
             xOffset = float(self.__reader[16][0])
             length = int(len(self.__reader[16:])/3)
-            print(length)
             for line in self.__reader[16:length]:
                 x = float(line[0]) - xOffset
                 if(self.__channel == 1):                
