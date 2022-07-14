@@ -20,7 +20,7 @@ layout = [[sg.T('Choose CSV file')],
           [sg.Canvas(key='-CANVAS-', size=(650,480))],
           [sg.B('Function 1', key='-FUNCTION1-'), sg.B('Function 2', key='-FUNCTION2-'), sg.B('Compare', key='-COMPARE-')]]
 
-window = sg.Window('Graph Integrator', layout, icon='./assets/graph.ico', element_justification='center')
+window = sg.Window('Graph Comparator', layout, icon='./assets/graph.ico', element_justification='center')
 
 def drawFigure(canvas, figure):
     fc = FigureCanvasTkAgg(figure, canvas)
